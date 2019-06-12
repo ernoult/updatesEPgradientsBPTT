@@ -1,6 +1,6 @@
 # EP-NEURIPS
 Updates of Equilibrium Prop Match Gradients of Backprop Through Time in an RNN with Static Input
-(Maxence Ernoumlt, Julie Grollier, Damien Querlioz, Yoshua Bengio, Benjamin Scellier)
+(Maxence Ernoult, Julie Grollier, Damien Querlioz, Yoshua Bengio, Benjamin Scellier)
 
 The following document provides details about the code provided, alongside the commands to be run to reproduce
 the results appearing in the draft. 
