@@ -1,4 +1,4 @@
-#Updates of Equilibrium Prop Match Gradients of Backprop Through Time in an RNN with Static Input
+# Updates of Equilibrium Prop Match Gradients of Backprop Through Time in an RNN with Static Input
 (https://arxiv.org/abs/1905.13633)
 
 The following document provides details about the code provided, alongside the commands to be run to reproduce
