@@ -2,7 +2,7 @@
 (https://arxiv.org/abs/1905.13633)
 
 The following document provides details about the code provided, alongside the commands to be run to reproduce
-the results appearing in the draft.
+the results appearing in the draft.$\sum_t \Delta(t)$ $$\sum_t \Delta(t)$$
 
 
 I - Package requirements
