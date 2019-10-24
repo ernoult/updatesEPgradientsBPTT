@@ -99,7 +99,7 @@ III - Details about main.py
     --epochs: number of epochs.
 
     --lr_tab: learning rates tab, to be provided from the output layer towards the first layer.
-              Example: --lr_tab 0.01 0.04 will apply a learning rate of 0.01 to W_{01} and 0.04 to W_{12}.
+              Example: --lr_tab 0.01 0.04 will apply a learning rate of 0.01 to <a href="https://www.codecogs.com/eqnedit.php?latex=W_{01}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?W_{01}" title="W_{01}" /></a> and 0.04 to <a href="https://www.codecogs.com/eqnedit.php?latex=W_{12}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?W_{12}" title="W_{12}" /></a>.
  
     --training-method: specify either 'EP' or 'BPTT'.
 
