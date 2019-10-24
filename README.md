@@ -2,7 +2,7 @@
 (https://arxiv.org/abs/1905.13633)
 
 The following document provides details about the code provided, alongside the commands to be run to reproduce
-the results appearing in the draft. $$x=\sqrt{2}$$
+the results appearing in the draft.
 
 
 I - Package requirements
