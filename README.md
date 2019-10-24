@@ -1,3 +1,4 @@
+%%latex
 # Updates of Equilibrium Prop Match Gradients of Backprop Through Time in an RNN with Static Input
 (https://arxiv.org/abs/1905.13633)
 
