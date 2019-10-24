@@ -2,7 +2,7 @@
 (https://arxiv.org/abs/1905.13633)
 
 The following document provides details about the code provided, alongside the commands to be run to reproduce
-the results appearing in the draft. <img src="https://latex.codecogs.com/gif.latex?O_t=\text { Onset event at time bin } t " /> 
+the results appearing in the draft.
 
 
 I - Package requirements
@@ -192,8 +192,7 @@ V - Details about netFunctions.py
 
   ii) evaluate: evaluates the model on the test set. 
 
-  iii) compute_nSdSDT: computes \nabla^{BPTT}_{s} (nS), \Delta^{EP}_{s} (dS) and \sum(\Delta^{EP}_{\theta})(DT).
-                    \sum(\Delta^{EP}_{\theta})(t) is the cumulated sum of the \Delta^{EP}_{\theta} up to t. 
+  iii) compute_nSdSDT: computes <a href="https://www.codecogs.com/eqnedit.php?latex=\nabla^{\rm&space;BPTT}_{\rm&space;s}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\nabla^{\rm&space;BPTT}_{\rm&space;s}" title="\nabla^{\rm BPTT}_{\rm s}" /></a> (nS), <a href="https://www.codecogs.com/eqnedit.php?latex=\Delta^{\rm&space;EP}_{\rm&space;s}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta^{\rm&space;EP}_{\rm&space;s}" title="\Delta^{\rm EP}_{\rm s}" /></a> (dS) and <a href="https://www.codecogs.com/eqnedit.php?latex=\sum_{t}\Delta^{\rm&space;EP}_{\theta}(t)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\sum_{t}\Delta^{\rm&space;EP}_{\theta}(t)" title="\sum_{t}\Delta^{\rm EP}_{\theta}(t)" /></a> (DT). 
 
   iv) compute_NT: computes \sum(\nabla^{BPTT}_{\theta})(NT). \sum(\nabla^{BPTT}_{\theta})(NT)(t) is the cumulated
                 sum of the \nabla^{BPTT}_{\theta} up to t. 
