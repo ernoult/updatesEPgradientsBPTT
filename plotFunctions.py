@@ -363,6 +363,7 @@ if __name__ == '__main__':
     
     if 'error_train_tab' in results_dict:
         plot_results('error', results_dict['error_train_tab'], results_dict['error_test_tab'])
+        print('Elapsed time: {}'.format(results_dict['elapsed_time']))
         plt.title('EP')
 
     if 'error_train_bptt_tab' in results_dict:

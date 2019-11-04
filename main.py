@@ -3,6 +3,7 @@ import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 import torch.optim as optim
 import pickle
+import datetime
 
 from netClasses import *
 from netFunctions import * 
@@ -120,7 +121,13 @@ parser.add_argument(
     type=int,
     default=5,
     metavar='F',
-    help='convolution filter size (default: 5)')      
+    help='convolution filter size (default: 5)')
+parser.add_argument(
+    '--Fpool',
+    type=int,
+    default=2,
+    metavar='Fp',
+    help='pooling filter size (default: 2)')         
 parser.add_argument(
     '--benchmark',
     action='store_true',
@@ -184,9 +191,9 @@ elif args.activation_function == 'hardsigm':
     def rho(x):
         return x.clamp(min = 0).clamp(max = 1)
     def rhop(x):
-        return (x >= 0) & (x <= 0)
+        return (x >= 0) & (x <= 1)
     def rhop2(x):
-        return (x >= 0) & (x <= 0)
+        return (x >= 0) & (x <= 1)
 
 elif args.activation_function == 'tanh':
     def rho(x):
@@ -202,41 +209,28 @@ if __name__ == '__main__':
     #Build the net
 
     if args.toymodel:
-        net = toyEPcont(args.device_label, args.size_tab, args.lr_tab, 
-                        args.T, args.Kmax, args.beta, 
-                        dt = args.dt, no_clamp = args.no_clamp)
+        net = toyEPcont(args)
 
     elif (not args.toymodel) & (not args.conv) & (not args.discrete):
-        net = EPcont(args.device_label, args.size_tab, args.lr_tab, 
-                    args.T, args.Kmax, args.beta, 
-                    dt = args.dt, no_clamp = args.no_clamp)
+        net = EPcont(args)
 
         if args.benchmark:
-            net_bptt = EPcont(args.device_label, args.size_tab, args.lr_tab, 
-                        args.T, args.Kmax, args.beta, 
-                        dt = args.dt, no_clamp = args.no_clamp)
-
+            net_bptt = EPcont(args)
             net_bptt.load_state_dict(net.state_dict())
 
     elif (not args.toymodel) & (not args.conv) & (args.discrete):
-        net = EPdisc(args.device_label, args.size_tab, args.lr_tab, 
-			        args.T, args.Kmax, args.beta)
+        net = EPdisc(args)
         if args.benchmark:
-            net_bptt = EPdisc(args.device_label, args.size_tab, args.lr_tab, 
-			            args.T, args.Kmax, args.beta)
-
+            net_bptt = EPdisc(args)
             net_bptt.load_state_dict(net.state_dict())        
 
-
     elif (not args.toymodel) & (args.conv):      
-        net = convEP(28, args.device_label, args.size_tab, args.C_tab,  args.lr_tab, 
-                    args.T, args.Kmax, args.beta, F = args.Fconv, 
-                    padding = args.padding, Fpool = 2)
+        net = convEP(args)
 
         if args.benchmark:
             net_bptt = convEP(28, args.device_label, args.size_tab, args.C_tab,  args.lr_tab, 
                         args.T, args.Kmax, args.beta, F = args.Fconv, 
-                        padding = args.padding, Fpool = 2)
+                        padding = args.padding, Fpool = args.Fpool)
             net_bptt.load_state_dict(net.state_dict())
         
                                   
@@ -301,12 +295,16 @@ if __name__ == '__main__':
         error_train_tab = []
         error_test_tab = []  
 
+        #*****MEASURE ELAPSED TIME*****#
+        start_time = datetime.datetime.now()
+        #******************************#
+	
         for epoch in range(1, args.epochs + 1):
             error_train = train(net, train_loader, epoch, args.training_method)
             error_test = evaluate(net, test_loader)
             error_train_tab.append(error_train)
             error_test_tab.append(error_test) ;
-            results_dict = {'error_train_tab' : error_train_tab, 'error_test_tab' : error_test_tab}  
+            results_dict = {'error_train_tab' : error_train_tab, 'error_test_tab' : error_test_tab, 'elapsed_time': datetime.datetime.now() - start_time}  
             if args.benchmark:
                 results_dict_bptt.update(results_dict)    
                 outfile = open(os.path.join(BASE_PATH, 'results'), 'wb')

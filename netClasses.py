@@ -10,32 +10,32 @@ from main import rho, rhop, rhop2
 
 #*****************************EP, energy based *********************************#
 class EPcont(nn.Module):
-    def __init__(self, device_label, size_tab, lr_tab, T, Kmax, beta, dt = 1, no_clamp = False):
+    def __init__(self, args):
         super(EPcont, self).__init__()
         
-        self.T = T
-        self.Kmax = Kmax
-        self.dt = dt
-        self.size_tab = size_tab
-        self.lr_tab = lr_tab
-        self.ns = len(size_tab) - 1
+        self.T = args.T
+        self.Kmax = args.Kmax
+        self.dt = args.dt
+        self.size_tab = args.size_tab
+        self.lr_tab = args.lr_tab
+        self.ns = len(args.size_tab) - 1
         self.nsyn = 2*(self.ns - 1) + 1
-        if device_label >= 0:    
-            device = torch.device("cuda:"+str(device_label)+")")
+        if args.device_label >= 0:    
+            device = torch.device("cuda:"+str(args.device_label)+")")
             self.cuda = True
         else:
             device = torch.device("cpu")
             self.cuda = False    
         self.device = device
-        self.no_clamp = no_clamp
-        self.beta = beta
+        self.no_clamp = args.no_clamp
+        self.beta = args.beta
                     
         w = nn.ModuleList([])           
         for i in range(self.ns - 1):
-            w.append(nn.Linear(size_tab[i + 1], size_tab[i], bias = True))
+            w.append(nn.Linear(args.size_tab[i + 1], args.size_tab[i], bias = True))
             w.append(None)
 
-        w.append(nn.Linear(size_tab[-1], size_tab[-2]))                                         
+        w.append(nn.Linear(args.size_tab[-1], args.size_tab[-2]))                                         
         self.w = w
         self = self.to(device)
 
@@ -196,31 +196,31 @@ class EPcont(nn.Module):
 #*****************************EP, prototypical *********************************#
 
 class EPdisc(nn.Module):
-    def __init__(self, device_label, size_tab, lr_tab, T, Kmax, beta, dt = 1):
+    def __init__(self, args):
         super(EPdisc, self).__init__()
-        self.T = T
-        self.Kmax = Kmax        
-        self.dt = dt
-        self.size_tab = size_tab
-        self.lr_tab = lr_tab
-        self.ns = len(size_tab) - 1
+        self.T = args.T
+        self.Kmax = args.Kmax        
+        self.dt = args.dt
+        self.size_tab = args.size_tab
+        self.lr_tab = args.lr_tab
+        self.ns = len(args.size_tab) - 1
         self.nsyn = 2*(self.ns - 1) + 1
-        if device_label >= 0:    
-            device = torch.device("cuda:"+str(device_label)+")")
+        if args.device_label >= 0:    
+            device = torch.device("cuda:"+str(args.device_label)+")")
             self.cuda = True
         else:
             device = torch.device("cpu")
-            self.cuda = False   
+            self.cuda = False
         self.device = device
-        self.beta = beta
+        self.beta = args.beta
 
         w = nn.ModuleList([])
                            
         for i in range(self.ns - 1):
-            w.append(nn.Linear(size_tab[i + 1], size_tab[i], bias = True))
+            w.append(nn.Linear(args.size_tab[i + 1], args.size_tab[i], bias = True))
             w.append(None)
             
-        w.append(nn.Linear(size_tab[-1], size_tab[-2]))                             
+        w.append(nn.Linear(args.size_tab[-1], args.size_tab[-2]))                             
         self.w = w
         self = self.to(device)
 
@@ -382,33 +382,33 @@ class EPdisc(nn.Module):
 #*****************************toy model, EP, energy based *********************************#
 
 class toyEPcont(nn.Module):
-    def __init__(self, device_label, size_tab, lr_tab, T, Kmax, beta, dt = 1, no_clamp = False):
+    def __init__(self, args):
         super(toyEPcont, self).__init__()
-        self.T = T
-        self.Kmax = Kmax
-        self.dt = dt
+        self.T = args.T
+        self.Kmax = args.Kmax
+        self.dt = args.dt
 
-        self.size_tab = size_tab
-        self.lr_tab = lr_tab
-        self.ns = len(size_tab) - 1
+        self.size_tab = args.size_tab
+        self.lr_tab = args.lr_tab
+        self.ns = len(args.size_tab) - 1
         self.nsyn = 2*(self.ns - 1) + 1
-        if device_label >= 0:    
-            device = torch.device("cuda:"+str(device_label)+")")
+        if args.device_label >= 0:    
+            device = torch.device("cuda:"+str(args.device_label)+")")
             self.cuda = True
         else:
             device = torch.device("cpu")
             self.cuda = False   
         self.device = device
-        self.beta = beta
-        self.no_clamp = no_clamp
+        self.beta = args.beta
+        self.no_clamp = args.no_clamp
         w = nn.ModuleList([])
 
         #fully connected architecture
         w.append(None)
-        w.append(nn.Linear(size_tab[1], size_tab[0]))
-        w.append(nn.Linear(size_tab[2], size_tab[0]))
+        w.append(nn.Linear(args.size_tab[1], args.size_tab[0]))
+        w.append(nn.Linear(args.size_tab[2], args.size_tab[0]))
         w.append(None)                               
-        w.append(nn.Linear(size_tab[2], size_tab[1]))
+        w.append(nn.Linear(args.size_tab[2], args.size_tab[1]))
         w.append(None)            
     
         self.w = w
@@ -578,31 +578,30 @@ class toyEPcont(nn.Module):
 
 #*****************************Convolutional EP, prototypical *********************************#                
 class convEP(nn.Module):
-    def __init__(self, input_size, device_label, size_classifier_tab, C_tab,  lr_tab, 
-                T, Kmax, beta, F = 5, Fpool = 2, padding = 0):
+    def __init__(self, args):
         super(convEP, self).__init__()
-        
-        if device_label >= 0:    
-            device = torch.device("cuda:"+str(device_label)+")")
+        input_size = 28
+        if args.device_label >= 0:    
+            device = torch.device("cuda:"+str(args.device_label)+")")
             self.cuda = True
         else:
             device = torch.device("cpu")
             self.cuda = False   
         self.device = device
         
-        self.C_tab = C_tab
-        self.lr_tab = lr_tab
-        self.T = T
-        self.Kmax = Kmax
+        self.C_tab = args.C_tab
+        self.lr_tab = args.lr_tab
+        self.T = args.T
+        self.Kmax = args.Kmax
         
-        self.beta = beta
-        self.F = F
-        self.Fpool = Fpool
+        self.beta = args.beta
+        self.F = args.Fconv
+        self.Fpool = args.Fpool
         
-        self.n_cp = len(C_tab) - 1
-        self.n_classifier = len(size_classifier_tab)
-        if padding:
-            P = int((F - 1)/2)
+        self.n_cp = len(args.C_tab) - 1
+        self.n_classifier = len(args.size_tab)
+        if args.padding:
+            P = int((args.F - 1)/2)
         else:
             P = 0 
 
@@ -616,19 +615,19 @@ class convEP(nn.Module):
 
         #Define conv operations
         for i in range(self.n_cp):
-            conv.append(nn.Conv2d(C_tab[i + 1], C_tab[i], F, padding = P))
+            conv.append(nn.Conv2d(args.C_tab[i + 1], args.C_tab[i], args.Fconv, padding = P))
 
-            size_conv_tab.append(size_convpool_tab[i] - F + 1 + 2*P)
+            size_conv_tab.append(size_convpool_tab[i] - args.Fconv + 1 + 2*P)
 
-            size_convpool_tab.append(int(np.floor((size_convpool_tab[i] - F + 1 + 2*P -Fpool)/2 + 1)))
+            size_convpool_tab.append(int(np.floor((size_convpool_tab[i] - args.Fconv + 1 + 2*P -args.Fpool)/2 + 1)))
         
         
             
         self.conv = conv
         
         #Define pool operations          	
-        self.pool = nn.MaxPool2d(Fpool, stride = Fpool, return_indices = True)	        
-        self.unpool = nn.MaxUnpool2d(Fpool, stride = Fpool)    
+        self.pool = nn.MaxPool2d(args.Fpool, stride = args.Fpool, return_indices = True)	        
+        self.unpool = nn.MaxUnpool2d(args.Fpool, stride = args.Fpool)    
         
         size_convpool_tab = list(reversed(size_convpool_tab))
         self.size_convpool_tab = size_convpool_tab
@@ -637,8 +636,8 @@ class convEP(nn.Module):
         self.size_conv_tab = size_conv_tab
 
         self.nconv = len(size_convpool_tab) - 1
-        size_tab = list(size_classifier_tab)
-        size_tab.append(C_tab[0]*size_convpool_tab[0]**2)
+        size_tab = list(args.size_tab)
+        size_tab.append(args.C_tab[0]*size_convpool_tab[0]**2)
         self.size_classifier_tab = size_tab
         del size_tab
         self.nc = len(self.size_classifier_tab) - 1
