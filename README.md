@@ -2,7 +2,7 @@
 (https://arxiv.org/abs/1905.13633)
 
 The following document provides details about the code provided, alongside the commands to be run to reproduce
-the results appearing in the draft. 
+the results appearing in the draft.
 
 
 I - Package requirements
@@ -192,8 +192,7 @@ V - Details about netFunctions.py
 
   ii) evaluate: evaluates the model on the test set. 
 
-  iii) compute_nSdSDT: computes \nabla^{BPTT}_{s} (nS), \Delta^{EP}_{s} (dS) and \sum(\Delta^{EP}_{\theta})(DT).
-                    \sum(\Delta^{EP}_{\theta})(t) is the cumulated sum of the \Delta^{EP}_{\theta} up to t. 
+  iii) compute_nSdSDT: computes \nabla^{\rm BPTT}_{\rm s}(nS), \Delta^{EP}_{s} (dS) and \sum_{t}\Delta^{EP}_{\theta}(t)(DT). 
 
   iv) compute_NT: computes \sum(\nabla^{BPTT}_{\theta})(NT). \sum(\nabla^{BPTT}_{\theta})(NT)(t) is the cumulated
                 sum of the \nabla^{BPTT}_{\theta} up to t. 

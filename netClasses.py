@@ -6,7 +6,7 @@ import torchvision
 import torch.optim as optim
 import torch.nn.functional as F
 
-from main import rho, rhop, rhop2
+from main import rho, rhop
 
 #*****************************EP, energy based *********************************#
 class EPcont(nn.Module):

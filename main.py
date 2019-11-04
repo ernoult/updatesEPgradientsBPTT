@@ -222,9 +222,7 @@ if __name__ == '__main__':
         net = convEP(args)
 
         if args.benchmark:
-            net_bptt = convEP(28, args.device_label, args.size_tab, args.C_tab,  args.lr_tab, 
-                        args.T, args.Kmax, args.beta, F = args.Fconv, 
-                        padding = args.padding, Fpool = args.Fpool)
+            net_bptt = convEP(args)
             net_bptt.load_state_dict(net.state_dict())
         
                                   
