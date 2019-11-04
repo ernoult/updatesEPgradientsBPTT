@@ -184,24 +184,18 @@ if  args.activation_function == 'sigm':
         return 1/(1+torch.exp(-(4*(x-0.5))))
     def rhop(x):
         return 4*torch.mul(rho(x), 1 -rho(x))
-    def rhop2(x):
-        return 4*torch.mul(x, 1 - x)
 
 elif args.activation_function == 'hardsigm':
     def rho(x):
         return x.clamp(min = 0).clamp(max = 1)
     def rhop(x):
         return (x >= 0) & (x <= 1)
-    def rhop2(x):
-        return (x >= 0) & (x <= 1)
 
 elif args.activation_function == 'tanh':
     def rho(x):
         return torch.tanh(x)
     def rhop(x):
-        return 1 - torch.tanh(x)**2
-    def rhop2(x):
-        return 1 - x**2   
+        return 1 - torch.tanh(x)**2 
             
                     
 if __name__ == '__main__':
