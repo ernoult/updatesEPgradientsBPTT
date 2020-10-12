@@ -1,158 +1,97 @@
 # Updates of Equilibrium Prop Match Gradients of Backprop Through Time in an RNN with Static Input
-(https://arxiv.org/abs/1905.13633)
+
+This repository contains the code producing the results of [the paper](http://papers.nips.cc/paper/8930-updates-of-equilibrium-prop-match-gradients-of-backprop-through-time-in-an-rnn-with-static-input) "Updates of Equilibrium Prop Match Gradients of Backprop Through Time in an RNN with Static Input", published as an oral contribution at NeurIPS 2019.
 
 The following document provides details about the code provided, alongside the commands to be run to reproduce
 the results appearing in the draft.
 
+The project contains the following files:
 
-I - Package requirements
+  + `main.py`: executes the code, with arguments specified in a parser.
 
-* Our code is compatible with Python 2.7 or 3.
+  + `netClasses.py`: contains the network classes.
 
-* Our virtual environment contains the following packages (after executing a pip freeze command):
+  + `netFunctions.py`: contains the functions to run on the networks.
 
-    #Basic packages:
-    absl-py==0.7.1
-    astor==0.7.1
-    backports.functools-lru-cache==1.5
-    backports.weakref==1.0.post1
-    cycler==0.10.0
-    enum34==1.1.6
-    funcsigs==1.0.2
-    futures==3.2.0
-    gast==0.2.2
-    grpcio==1.19.0
-    h5py==2.9.0
-    kiwisolver==1.0.1
-    Markdown==3.1
-    matplotlib==2.2.4
-    mock==2.0.0
-    numpy==1.16.2
-    pbr==5.1.3
-    Pillow==6.0.0
-    protobuf==3.7.1
-    pyparsing==2.3.1
-    python-dateutil==2.8.0
-    pytz==2018.9
-    PyYAML==5.1
-    scipy==1.2.1
-    six==1.12.0
-    subprocess32==3.5.3
-    termcolor==1.1.0
-    Werkzeug==0.15.2
+  + `plotFunctions.py`: contains the functions to plot the results. 
 
-    #Relevant packages for our project:
-    Keras==2.2.4
-    Keras-Applications==1.0.6
-    Keras-Preprocessing==1.0.5
-    torch==1.0.1.post2
-    torchvision==0.2.2.post3
-    tensorboard==1.12.2
-    tensorflow==1.12.0
 
-* To create an environment to run our code:
+## Package requirements
 
-  i) Install Python 2.7 or 3.
-  ii) Install pip.
-  iii) Run pip install virtualenv.
-  ii) Run mkdir myproject.
-  iii) Run cd myproject.
-  iv) Run virtualenv myenv.
-  v) Create a requirements.txt file containing the package requirements of the previous bullet.
-  vi) source myenv/bin/activate.
-  vii) Run pip install -r requirements.txt.
+Run the following command lines to set the environment using conda:
+```
+conda create --name EP python=3.6
+conda activate EP
+conda install -c conda-forge matplotlib
+conda install pytorch torchvision -c pytorch
+```
 
-II - Files
 
-* The project contains the following files:
+## Details about `main.py`
 
-  i) main.py: executes the code, with arguments specified in a parser.
 
-  ii) netClasses.py: contains the network classes.
+  `main.py` proceeds in the following way:
 
-  iii) netFunctions: contains the functions to run on the networks.
-
-  iv) plotFunctions: contains the functions to plot the results. 
-
-III - Details about main.py
-
-* main.py proceeds in the following way:
-
-  i) It first parses arguments typed in the terminal to build a network and get optimization parameters
+  + It first parses arguments typed in the terminal to build a network and get optimization parameters
   (i.e. learning rates, mini-batch size, network topology, etc.)
 
-  ii) It loads the MNIST data set with torchvision.
+  + It loads the MNIST data set with torchvision.
 
-  iii) It builds the nets using netClasses.py.
+  + It builds the nets using netClasses.py.
 
-  iv) It takes one of the three actions that can be fed into the parser.
+  + It takes one of the three actions that can be fed into the parser.
 
 
-* The parser takes the following arguments:
+  The parser takes the following arguments:
 
-  i) Optimization arguments:  
-
-    --batch-size: training batch size.
-
-    --test-batch-size: test batch size used to compute the test error.
-
-    --epochs: number of epochs.
-
-    --lr_tab: learning rates tab, to be provided from the output layer towards the first layer.
-              Example: --lr_tab 0.01 0.04 will apply a learning rate of 0.01 to W_{01} and 0.04 to W_{12}.
+  + Optimization arguments:
+  
+  |Arguments|Description|Examples|
+|-------|------|------|
+|`batch-size`|Training batch size.|`--batch-size 128`|
+|`test-batch-size`|Test batch size used to compute the test error.|`--test-batch-size 128`|
+|`epochs`|Number of epochs.| `--epochs 50`|
+|`lr_tab` |Learning rates tab, to be provided from the output layer towards the first layer.|`--lr_tab 0.01 0.04` will apply a learning rate of 0.01 to W_{01} and 0.04 to W_{12}|
+|`training-method`|Training method used, either Equilibrium Propagation or Backpropagation Through Time|`--training-method EP`,`--training-method BPTT`|
+|`benchmark`|Trains two exact same models (i.e. with the same weights initially), one under 'EP' AND another one under 'BPTT', with the exact same hyperparameters.|`--benchmark`|
  
-    --training-method: specify either 'EP' or 'BPTT'.
 
-    --benchmark: trains two exact same models (i.e. with the same weights initially), one under 'EP' AND another one under 'BPTT', with the exact same hyperparameters.
-
-
-  ii) Network arguments: 
-
-    --size_tab: specify the topology of the network, backward from the output layer.
-                Example: --size_tab 10 512 784.
-                It is also used alongside --C_tab to define the fully connected part of a
-                convolutional architecture -- see below. 
-
-    --discrete: specifies if we are in the prototypical (discrete = True) or energy-based (discrete = False) setting. 
-
-    --dt: time increment in the energy-based setting (denoted \epsilon in the draft). 
-
-    --T: number of steps in the first phase. 
-
-    --Kmax: number of steps in the second phase. 
-
-    --beta: nudging parameter. 
+ + Network arguments: 
  
-    --activation-function: selects the activation function used: either 'tanh', 'sigm' (for sigmoid) or 'hardsigm' (for hard-sigmoid).
+   |Arguments|Description|Examples|
+   |-------|------|------|
+   |`size_tab`|Specifies the topology of the network, backward from the output layer. It is also used alongside `--C_tab` to define the fully connected part of a
+                convolutional architecture (see below) |`--size_tab 10 512 784`|
+   |`discrete`|Specifies if we are in the prototypical (discrete = True) or energy-based (discrete = False) setting |`--discrete` |
+   |`dt`| Time increment in the energy-based setting (denoted \epsilon in the draft)|`--dt 0.1`|
+   |`T`|Number of steps in the first phase.|`--T 30`|
+   |`Kmax`|Number of steps in the second phase.|`--Kmax 10`|
+   |`beta`|Value of the nudging parameter.|`--beta 0.1`|
+   |`activation-function`|Selects the activation function used: either 'tanh', 'sigm' (for sigmoid) or 'hardsigm' (for hard-sigmoid)|`--activation-function 'sigm'`|
+   |`no-clamp`|Specifies whether we clamp the updates (no-clamp = False) or not when training in the energy-based setting.|`--no-clamp`|
+   |`toymodel`|Specifies whether we work on the toymodel (toymodel = True) or not. |`--toymodel`|
+   |`C_tab`|Channels tab, going backward from the classifier.|`--C_tab 64 32 1`|
+   |`padding`|Specifies whether padding is applied (padding = 1) to keep the image size invariant after a convolution.|`--padding`|
+   |`Fconv`|Convolution filter size. |`--Fconv 3`|
+   
+  + Others:
 
-    --no-clamp: specifies whether we clamp the updates (no-clamp = False) or not when training in the energy-based setting.
-
-    --toymodel: speficy whether we work on the toymodel (toymodel = True) or not. 
-                                                 
-    --C_tab: channels tab, going backward from the classifier. 
-             Example: --C_tab 64 32 1
-
-    --padding: specifies whether padding is applied (padding = 1) to keep the image size invariant after a convolution.
-
-    --Fconv: specifies the convolution filter size. 
-
-  iii) Others:
-
-    --action: specifies the action to take in main.py (see next bullet).
-
-    --device-label: selects the cuda device to run the simulation on. 
+   |Arguments|Description|Examples|
+   |-------|------|------|
+   |`action`|Specifies the action to take in main.py (see next bullet). | `--action train`|
+   |`device-label`|Selects the cuda device to run the simulation on (default: -1, selecting CPU). | `--device-label 1`|
 
 
-* main.py can take three different actions:
+ main.py can take three different actions:
 
-  i) 'train': the network is trained with the arguments provided in the parser. It is trained by default with EP and/or
+  + `train`: the network is trained with the arguments provided in the parser. It is trained by default with EP and/or
       with BPTT depending on the arguments provided in the parser. Results are automatically saved in a folder sorted by
       date, GPU ID and trial number, along with a .txt file containing all hyperparameters. 
 
-  ii) 'plotcurves': we demonstrate the GDU property on the network with the arguments provided in the parser. Results are 
+  + `plotcurves`: we demonstrate the GDU property on the network with the arguments provided in the parser. Results are 
        automatically saved in a folder sorted by trial number, along with a .txt file containing all hyperparameters. 
 
-  iii) 'receipe': computes the proportion of synapses that satisfy the GDU property in sign, averaged over 20 sample mini-batches. It helps to tune the recurrent hyperparameters T, K and beta. 
+  + `receipe`: computes the proportion of synapses that satisfy the GDU property in sign, averaged over 20 sample mini-batches. It helps to tune the recurrent hyperparameters T, K and beta. 
 
 
 IV-  Details about netClasses.py
