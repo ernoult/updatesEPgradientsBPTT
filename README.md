@@ -60,8 +60,7 @@ conda install pytorch torchvision -c pytorch
  
    |Arguments|Description|Examples|
    |-------|------|------|
-   |`size_tab`|Specifies the topology of the network, backward from the output layer. It is also used alongside `--C_tab` to define the fully connected part of a
-                convolutional architecture (see below) |`--size_tab 10 512 784`|
+   |`size_tab`|Specifies the topology of the network, backward from the output layer. It is also used alongside `--C_tab` to define the fully connected part of a convolutional architecture (see below) |`--size_tab 10 512 784`|
    |`discrete`|Specifies if we are in the prototypical (discrete = True) or energy-based (discrete = False) setting |`--discrete` |
    |`dt`| Time increment in the energy-based setting (denoted \epsilon in the draft)|`--dt 0.1`|
    |`T`|Number of steps in the first phase.|`--T 30`|
