@@ -1,6 +1,6 @@
 # Updates of Equilibrium Prop Match Gradients of Backprop Through Time in an RNN with Static Input
 
-![GitHub Logo](/bptt-ep-pic.png =50x50)
+![GitHub Logo](/bptt-ep-pic.png)<!-- .element height="50%" width="50%" -->
 
 This repository contains the code producing the results of [the paper](http://papers.nips.cc/paper/8930-updates-of-equilibrium-prop-match-gradients-of-backprop-through-time-in-an-rnn-with-static-input) "Updates of Equilibrium Prop Match Gradients of Backprop Through Time in an RNN with Static Input", published as an oral contribution at NeurIPS 2019. You can find [here](https://www.youtube.com/watch?v=Xb5sM0NRy_0&feature=youtu.be) a 3 mins summary and [there](https://slideslive.com/38923914/updates-of-equilibrium-prop-match-gradients-of-backprop-through-time-in-an-rnn-with-static-input?ref=account-folder-43613-folders) the 12 mins talk given at NeurIPS. 
 
