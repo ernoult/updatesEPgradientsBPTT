@@ -150,7 +150,7 @@ We summarize the different functions of `plotFunctions.py` in the following tab.
  |`plot_S`| Plots BPTT gradients and EP updates for the neurons.|
  |`compute_nTdT`|Same function as in netFunctions.py.|
  |`compute_Hist`|Computes the Relative Mean Squared error (RMSE) between the BPTT gradients and the EP updates.|
- |`plot_results`: Plots the test and train accuracy as a function of epochs.|
+ |`plot_results`| Plots the test and train accuracy as a function of epochs.|
 
 ******************************************************************************
 
