@@ -205,8 +205,8 @@ class EPdisc(nn.Module):
         self.lr_tab = args.lr_tab
         self.ns = len(args.size_tab) - 1
         self.nsyn = 2*(self.ns - 1) + 1
-        if args.device_label >= 0:    
-            device = torch.device("cuda:"+str(args.device_label)+")")
+        if args.device_label >= 0:
+            device = torch.device("cuda:"+str(args.device_label))
             self.cuda = True
         else:
             device = torch.device("cpu")
